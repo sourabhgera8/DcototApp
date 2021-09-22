@@ -6,9 +6,9 @@ export default function SplashScreen({ route, navigation }) {
 
     useEffect(() => {
 
-        setInterval(() => {
-              navigation.navigate('CreateRecord')
-        }, 2000)
+        setTimeout(() => {
+            navigation.navigate('CreateRecord')
+        }, 1000)
 
     }, [])
 

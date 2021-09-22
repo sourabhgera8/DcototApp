@@ -8,7 +8,7 @@ import DatePicker from 'react-native-datepicker'
 var db = openDatabase({ name: DATABASE_NAME });
 
 
-export default function CreateRecord({ route, navigation }) {
+function CreateRecord({ route, navigation }) {
 
     const[lowbp, setLowbp] = useState('')
     const[highbp , setHighbp] = useState('')
@@ -48,7 +48,7 @@ export default function CreateRecord({ route, navigation }) {
 
     const onViewReport = () => {     
         // alert(" come ")  
-        navigation.navigate('ReportScreen')
+        navigation.push('ReportScreen')
     }
     const handleClick = () => {       
       console.log("K______", lowbp);
@@ -56,8 +56,17 @@ export default function CreateRecord({ route, navigation }) {
       console.log("K______", sugar);
       console.log("K______", selectedDate);
 
-      if(lowbp ==='' || highbp ==='' || sugar ==='' || selectedDate ==='' ){
-        alert(' fields cannot be blank');
+      if(lowbp ===''){
+        alert(' Low bp cannot be blank');
+        return;
+      }else if(highbp ===''){
+        alert(' High Bp cannot be blank');
+        return;
+      }else if(sugar ===''){
+        alert(' Sugar cannot be blank');
+        return;
+      }else if(selectedDate ==='' ){
+        alert(' date cannot be blank');
         return;
       }
 
@@ -79,7 +88,7 @@ export default function CreateRecord({ route, navigation }) {
                 [
                   {
                     text: 'Ok',
-                    onPress: () => navigation.navigate('ReportScreen'),
+                    onPress: () => navigation.push('ReportScreen'),
                     // onPress: () => {alert(" 22222")}
                   },
                 ],
@@ -104,6 +113,7 @@ export default function CreateRecord({ route, navigation }) {
                     maxLength={50}
                     keyboardType={'numeric'}
                     placeholder={'like 80'}
+                    maxLength={3}
                     value={lowbp}
                     onChangeText={text => setLowbp(text)}
                     defaultValue={lowbp}
@@ -122,6 +132,7 @@ export default function CreateRecord({ route, navigation }) {
                     maxLength={50}
                     placeholder={'like 120'}
                     value={highbp}
+                    maxLength={3}
                     onChangeText={text => setHighbp(text)}
                     defaultValue={highbp}
                     secureTextEntry={false}
@@ -136,7 +147,7 @@ export default function CreateRecord({ route, navigation }) {
                     autoCapitalize="none"
                     returnKeyType="next"
                     keyboardType={'numeric'}
-                    maxLength={50}
+                    maxLength={3}
                     placeholder={'like 80 to 500'}
                     value={sugar}
                     onChangeText={text => setSugar(text)}
@@ -173,3 +184,5 @@ export default function CreateRecord({ route, navigation }) {
          </View>
     );
 }
+
+export default CreateRecord
