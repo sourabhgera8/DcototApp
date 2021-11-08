@@ -5,6 +5,8 @@ import {
 } from 'react-native'
 import { openDatabase } from 'react-native-sqlite-storage';
 import DATABASE_NAME from '../utils/config'
+import moment from 'moment';
+
 var db = openDatabase({ name: DATABASE_NAME });
 
 export default function ReportScreen({ route, navigation }) {
@@ -50,10 +52,36 @@ export default function ReportScreen({ route, navigation }) {
         setLoading(false);
     }
 
-    renderRow = ({ index, item }) => {
+    onListHeaderComponent = () => {
         return (
-            <View style={styles.itemRow}>
-                <Text style={styles.itemText}> {++index}). {item.low_Bp}/{item.high_Bp} {item.sugar} {item.recordDate} </Text>
+            <View style={styles.itemRowHeader}>
+                <Text style={styles.itemTextSno}> {"S no"}). </Text>
+                <Text style={styles.itemTextBp}> {"Low "}/{"High Bp"}  </Text>
+                <Text style={styles.itemTextSugar}> {"Sugar"} </Text>
+                <Text style={styles.itemTextDate}> {"Date"} </Text>
+            </View>
+        )
+    }
+    renderRow = ({ index, item }) => {
+  			var myDate =  moment(item.recordDate,"YYYY-MM-DD").format("DD-MMM-YYYY");
+
+        return (
+            // <View style={styles.itemRow}>
+            //     <Text style={styles.itemText}> {++index}). {item.low_Bp}/{item.high_Bp} {item.sugar} {item.recordDate} </Text>
+            // </View>
+						<View style={{flex: 1,
+							flexDirection:'row',
+							width: '95%',
+							minHeight: 50,
+							borderRadius:10,
+							marginHorizontal:10,
+							backgroundColor: item.low_Bp >100 ? 'red' : item.high_Bp >150 ? 'red' : item.sugar >180 ? 'orange' :'green',
+							marginBottom: 5,
+							borderBottomWidth: 1,}}>
+                <Text style={styles.itemTextSno}> {++index}). </Text>
+                <Text style={styles.itemTextBp}> {item.low_Bp}/{item.high_Bp}  </Text>
+                <Text style={styles.itemTextSugar}> {item.sugar} </Text>
+                <Text style={styles.itemTextDate}> {myDate} </Text>
             </View>
         )
     }
@@ -72,26 +100,18 @@ export default function ReportScreen({ route, navigation }) {
       }
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
 
-         
-            {/* {loading ?
-                <Text>In Progress...............</Text>
-                : */}
-                <FlatList
-                    style={styles.container}
-                    numColumns={2}
-                    // data={datafromDatabase.length ==0? emptyMSG : datafromDatabase}
-                    data={datafromDatabase}
-                    renderItem={renderRow}
-                    keyExtractor={(item, index) => index.toString()}
-                    // refreshing={loading}
-                // onRefresh={getDataFromDatabase}
-                />
-            {/* } */}
+				<FlatList
+					style={styles.container}
+					data={datafromDatabase}
+					ListHeaderComponent={onListHeaderComponent}
+					renderItem={renderRow}
+					keyExtractor={(item, index) => index.toString()}
+				/>
 
-        </View>
-    )
+			</View>
+		)
 }
 
 const styles = StyleSheet.create({
@@ -103,9 +123,58 @@ const styles = StyleSheet.create({
     itemRow: {
         flex: 1,
         width: '100%',
+				minHeight: 50,
+        // borderBottomColor: '',
+        borderBottomWidth: 0.5,
+				paddingBottom:100,
+    },
+    itemRowHeader: {
+        flex: 1,
+				flexDirection:'row',
+				width: '95%',
+				marginLeft:10,
+				minHeight: 50,
         // borderBottomColor: '',
         marginBottom: 5,
         borderBottomWidth: 1,
+				// backgroundColor:'red'
+    },
+    itemStyle: {
+        // flex: 1,
+				// flexDirection:'row',
+        // width: '100%',
+				// minHeight: 50,
+        // backgroundColor:'green',
+        // marginBottom: 5,
+        // borderBottomWidth: 1,
+    },
+    itemTextSno: {
+				flex: 0.7,
+        fontSize: 16,
+        padding: 2,
+				textAlign:'center',
+				paddingVertical:18,
+    },
+    itemTextBp: {
+				flex:1.5,
+        fontSize: 16,
+				textAlign:'center',
+				paddingVertical:18,
+        padding: 2
+    },
+    itemTextSugar: {
+				flex:1,
+        fontSize: 16,
+        padding: 2,
+				textAlign:'center',
+				paddingVertical:18,
+    },
+    itemTextDate: {
+				flex:2,
+			fontSize: 16,
+        padding: 2,
+				textAlign:'center',
+				paddingVertical:18,
     },
     itemText: {
         fontSize: 16,
