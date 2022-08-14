@@ -95,6 +95,10 @@ export default function ReportScreen({ route, navigation }) {
               No Record Inserted Database is Empty...
               </Text>
     
+            <Text style={{ fontSize: 25, textAlign: 'center' }}>
+              No Record Inserted Database is Empty...
+              </Text>
+    
           </View>
         );
       }
